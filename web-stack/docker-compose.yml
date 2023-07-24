@@ -1,0 +1,61 @@
+--- 
+version: '3.7'
+services:
+#
+  nginx:
+    image: lscr.io/linuxserver/nginx:latest
+    container_name: nginx
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${LOCVOL1}/${APPVOLDIR}:/config
+    #ports:
+      #- 80:80
+      #- 443:443
+    restart: unless-stopped
+    labels:
+      - swag=enable
+      - swag_address=web1
+      - swag_url=web1.finchtech.com
+#
+  #db:
+  #  image: lscr.io/linuxserver/mariadb:latest
+  #  container_name: mariadb
+  #  env_file: stack.env # used by portainer
+  #  volumes:
+  #    - ${LOCVOL1}webstack/mariadb:/config
+  #  restart: unless-stopped
+#
+  heimdall:
+    image: lscr.io/linuxserver/heimdall:latest
+    container_name: heimdall
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${LOCVOL1}/${APPVOLDIR}:/config
+    restart: unless-stopped
+    labels:
+      - swag=enable
+      - swag_auth=authelia
+      #- swag_address=web1
+      #- swag_url=web1.finchtech.com
+#
+  #phpmyadmin:
+    #image: lscr.io/linuxserver/phpmyadmin:latest
+    #container_name: phpmyadmin
+    #env_file: stack.env # used by portainer
+    #environment:
+    #  - PMA_ARBITRARY=1 #optional
+    #  - PMA_ABSOLUTE_URI=https://phpmyadmin.finchhome.xyz #optional
+    #volumes:
+    #  - ${LOCVOL1}webstack/phpmyadmin:/config
+    #restart: unless-stopped
+#
+networks:
+  default:
+    name: ${CONNET}
+    external: true
