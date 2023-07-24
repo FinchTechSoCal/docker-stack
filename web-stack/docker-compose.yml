@@ -10,7 +10,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ${LOCVOL1}/${APPVOLDIR}:/config
+      - ${LOCVOL1}/${APPVOLDIR}/nginx:/config
     #ports:
       #- 80:80
       #- 443:443
@@ -36,7 +36,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ${LOCVOL1}/${APPVOLDIR}:/config
+      - ${LOCVOL1}/${APPVOLDIR}/heimdall:/config
     restart: unless-stopped
     labels:
       - swag=enable
