@@ -1,0 +1,61 @@
+#
+# https://nginxproxymanager.com/setup/#using-mysql-mariadb-database
+#
+--- 
+version: '3.7'
+services:
+  npm:
+    image: jc21/nginx-proxy-manager:latest
+    container_name: npm
+    cap_add:
+      - NET_ADMIN
+    environment:
+      # Mysql/Maria connection parameters:
+      - DB_MYSQL_HOST=${DB_MYSQL_HOST}
+      - DB_MYSQL_PORT=3306
+      - DB_MYSQL_USER=${DB_MYSQL_USER}
+      - DB_MYSQL_PASSWORD=${DB_MYSQL_PASSWORD}
+      - DB_MYSQL_NAME=${DB_MYSQL_NAME}
+      # Uncomment this if IPv6 is not enabled on your host
+      - DISABLE_IPV6=true
+    volumes:
+      - ${LOCVOL1}npm/app:/data
+      - ${LOCVOL1}npm/certs:/etc/letsencrypt
+    ports:
+      - 443:443
+      - 80:80
+      - 10081:81 # NPM admin interface
+      # Other ports we want to expose?
+      # - '21:21' # FTP
+      - '2222:2222' # SSH 2222
+      - '2223:2223' # SSH 2223
+      - '2224:2224' # SSH 2224
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "/bin/check-health"]
+      interval: 10s
+      timeout: 3s
+    depends_on:
+      - db
+#
+  db:
+    image: lscr.io/linuxserver/mariadb:latest
+    container_name: ${DB_MYSQL_HOST}
+    environment:
+      - PUID=${DBPUID}
+      - PGID=${DBPGID}
+      - TZ=${TZ}
+      - MYSQL_ROOT_PASSWORD=${DB_MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${DB_MYSQL_NAME} #optional
+      - MYSQL_USER=${DB_MYSQL_USER} #optional
+      - MYSQL_PASSWORD=${DB_MYSQL_PASSWORD} #optional
+    volumes:
+      - ${LOCVOL1}npm/db:/config
+    #ports:
+      #- 3306:3306
+    restart: unless-stopped
+#
+networks:
+  default:
+    name: ${CONNET}
+    external: true
