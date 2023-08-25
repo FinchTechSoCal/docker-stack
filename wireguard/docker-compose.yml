@@ -1,0 +1,36 @@
+--- 
+version: '3.7'
+services:
+#
+  wireguard:
+    image: lscr.io/linuxserver/wireguard:latest
+    container_name: wireguard
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE #optional
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - SERVERURL=${WGSERVERURL} #optional
+      - SERVERPORT=${WGSERVERPORT} #optional
+      - PEERS=${WGPEERS} #optional
+      - PEERDNS=${WGPEERDNS} #optional
+      - INTERNAL_SUBNET=${WGINTERNAL_SUBNET} #optional
+      - ALLOWEDIPS=${WGALLOWEDIPS} #optional
+      - PERSISTENTKEEPALIVE_PEERS=${WGPERSISTENTKEEPALIVE_PEERS} #optional
+      - LOG_CONFS=${WGLOG_CONFS} #optional
+    volumes:
+      - ${LOCVOL1}wireguard:/config
+      - /lib/modules:/lib/modules #optional
+    ports:
+      - 51820:51820/udp
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    restart: unless-stopped
+#
+#
+networks:
+  default:
+    name: ${CONNET}
+    external: true
