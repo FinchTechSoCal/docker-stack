@@ -1,0 +1,91 @@
+--- 
+version: '3.7'
+services:
+#
+  netbox:
+    image: lscr.io/linuxserver/netbox:latest
+    container_name: netbox
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - SUPERUSER_EMAIL=${NETBOX_SUPEREMAIL}
+      - SUPERUSER_PASSWORD=${NETBOX_SUPERPASS}
+      - ALLOWED_HOST=${NETBOX_HOST}
+      - DB_NAME=netbox
+      - DB_USER=netbox
+      - DB_PASSWORD=${NETBOX_DB_PASS}
+      - DB_HOST=postgres
+      - DB_PORT=
+      - REDIS_HOST=redis
+      - REDIS_PORT=
+      - REDIS_PASSWORD=${NETBOX_REDIS_PASS}
+      - REDIS_DB_TASK=
+      - REDIS_DB_CACHE=
+      - BASE_PATH= #optional
+      - REMOTE_AUTH_ENABLED= #optional
+      - REMOTE_AUTH_BACKEND= #optional
+      - REMOTE_AUTH_HEADER= #optional
+      - REMOTE_AUTH_AUTO_CREATE_USER= #optional
+      - REMOTE_AUTH_DEFAULT_GROUPS= #optional
+      - REMOTE_AUTH_DEFAULT_PERMISSIONS= #optional
+    volumes:
+      - ${LOCVOL1}netbox/netbox:/config
+    #ports:
+    #  - 8100:8000
+    restart: unless-stopped
+    depends_on:
+    - postgres
+    - redis
+    - redis-cache
+#
+  # postgres
+  postgres:
+    image: docker.io/postgres:latest
+    #env_file: env/postgres.env
+    environment:
+      - POSTGRES_DB=netbox
+      - POSTGRES_PASSWORD=${NETBOX_DB_PASS}
+      - POSTGRES_USER=netbox
+    volumes:
+      - ${LOCVOL1}netbox/postgres:/var/lib/postgresql/data
+    restart: unless-stopped
+#
+  # redis
+  redis:
+    image: docker.io/redis:latest
+    command:
+    - sh
+    - -c # this is to evaluate the $REDIS_PASSWORD from the env
+    - redis-server --appendonly yes --requirepass ${NETBOX_REDIS_PASS} ## $$ because of docker-compose
+    #env_file: env/redis.env
+    environment:
+      - REDIS_PASSWORD=${NETBOX_REDIS_PASS}
+    volumes:
+    - ${LOCVOL1}netbox/redis-data:/data
+    restart: unless-stopped
+  redis-cache:
+    image: docker.io/redis:latest
+    command:
+    - sh
+    - -c # this is to evaluate the $REDIS_PASSWORD from the env
+    - redis-server --requirepass ${NETBOX_REDISCACHE_PASS} ## $$ because of docker-compose
+    #env_file: env/redis-cache.env
+    environment:
+      - REDIS_PASSWORD=${NETBOX_REDISCACHE_PASS}
+    volumes:
+    - ${LOCVOL1}netbox/redis-cache:/data
+    restart: unless-stopped
+#
+  #adminer:
+    #image: adminer:latest
+    #restart: unless-stopped
+    #ports:
+    #  - 8101:8080
+#
+#
+#
+networks:
+  default:
+    name: ${CONNET}
+    external: true
