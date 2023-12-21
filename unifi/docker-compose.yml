@@ -37,7 +37,6 @@ services:
     image: docker.io/mongo:4.4.26
     container_name: unifi-db
     restart: unless-stopped
-    env_file: stack.env
     volumes:
       - ${LOCVOL1}unifi/db:/data/db
       - ${LOCVOL1}unifi/db/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
