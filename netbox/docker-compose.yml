@@ -3,7 +3,7 @@ version: '3.7'
 services:
 #
   netbox:
-    image: lscr.io/linuxserver/netbox:latest
+    image: ${NETBOXIMG} #lscr.io/linuxserver/netbox:latest
     container_name: netbox
     environment:
       - PUID=${PUID}
@@ -12,8 +12,8 @@ services:
       - SUPERUSER_EMAIL=${NETBOX_SUPEREMAIL}
       - SUPERUSER_PASSWORD=${NETBOX_SUPERPASS}
       - ALLOWED_HOST=${NETBOX_HOST}
-      - DB_NAME=netbox
-      - DB_USER=netbox
+      - DB_NAME=${NETBOX_DB_NAME}
+      - DB_USER=${NETBOX_DB_USER}
       - DB_PASSWORD=${NETBOX_DB_PASS}
       - DB_HOST=postgres
       - DB_PORT=
@@ -41,19 +41,19 @@ services:
 #
   # postgres
   postgres:
-    image: docker.io/postgres:15-alpine
+    image: ${NETBOXDBIMG} # docker.io/postgres:15-alpine
     #env_file: env/postgres.env
     environment:
-      - POSTGRES_DB=netbox
+      - POSTGRES_DB=${NETBOX_DB_NAME}
       - POSTGRES_PASSWORD=${NETBOX_DB_PASS}
-      - POSTGRES_USER=netbox
+      - POSTGRES_USER=${NETBOX_DB_USER}
     volumes:
       - ${LOCVOL1}netbox/postgres:/var/lib/postgresql/data
     restart: unless-stopped
 #
   # redis
   redis:
-    image: docker.io/redis:7-alpine
+    image: ${NETBOXREDISIMG} # docker.io/redis:7-alpine
     command:
     - sh
     - -c # this is to evaluate the $REDIS_PASSWORD from the env
@@ -65,7 +65,7 @@ services:
     - ${LOCVOL1}netbox/redis-data:/data
     restart: unless-stopped
   redis-cache:
-    image: docker.io/redis:7-alpine
+    image: ${NETBOXREDISIMG} # docker.io/redis:7-alpine
     command:
     - sh
     - -c # this is to evaluate the $REDIS_PASSWORD from the env
