@@ -11,7 +11,7 @@ services:
       - TZ=${TZ}
       - SUPERUSER_EMAIL=${NETBOX_SUPEREMAIL}
       - SUPERUSER_PASSWORD=${NETBOX_SUPERPASS}
-      - ALLOWED_HOST=${NETBOX_HOST}
+      - ALLOWED_HOST=${NETBOX_HOST} # set this to * unless you know your inbound host/IP
       - DB_NAME=${NETBOX_DB_NAME}
       - DB_USER=${NETBOX_DB_USER}
       - DB_PASSWORD=${NETBOX_DB_PASS}
