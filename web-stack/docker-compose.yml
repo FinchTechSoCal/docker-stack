@@ -52,6 +52,17 @@ services:
       - ${LOCVOL1}/phpmyadmin:/config
     restart: unless-stopped
 #
+  adminer:
+    image: adminer:latest
+    container_name: adminer
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    restart: unless-stopped
+    #ports:
+    #  - 8101:8080
+#
 networks:
   default:
     name: ${CONNET}
