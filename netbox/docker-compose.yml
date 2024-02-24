@@ -31,8 +31,8 @@ services:
       - REMOTE_AUTH_DEFAULT_PERMISSIONS= #optional
     volumes:
       - ${LOCVOL1}netbox/netbox:/config
-    #ports:
-    #  - 8100:8000
+    ports:
+      - 8100:8000
     restart: unless-stopped
     depends_on:
     - postgres
