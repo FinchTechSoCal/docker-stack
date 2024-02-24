@@ -15,9 +15,9 @@ services:
       - DB_NAME=${NETBOX_DB_NAME}
       - DB_USER=${NETBOX_DB_USER}
       - DB_PASSWORD=${NETBOX_DB_PASS}
-      - DB_HOST=postgres
+      - DB_HOST=netbox-postgres
       - DB_PORT=
-      - REDIS_HOST=redis
+      - REDIS_HOST=netbox-redis
       - REDIS_PORT=
       - REDIS_PASSWORD=${NETBOX_REDIS_PASS}
       - REDIS_DB_TASK=
@@ -42,6 +42,7 @@ services:
   # postgres
   postgres:
     image: ${NETBOXDBIMG} # docker.io/postgres:15-alpine
+    container_name: netbox-postgres
     #env_file: env/postgres.env
     environment:
       - POSTGRES_DB=${NETBOX_DB_NAME}
@@ -54,6 +55,7 @@ services:
   # redis
   redis:
     image: ${NETBOXREDISIMG} # docker.io/redis:7-alpine
+    container_name: netbox-redis
     command:
     - sh
     - -c # this is to evaluate the $REDIS_PASSWORD from the env
@@ -66,6 +68,7 @@ services:
     restart: unless-stopped
   redis-cache:
     image: ${NETBOXREDISIMG} # docker.io/redis:7-alpine
+    container_name: netbox-redis-cache
     command:
     - sh
     - -c # this is to evaluate the $REDIS_PASSWORD from the env
