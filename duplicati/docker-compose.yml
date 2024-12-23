@@ -3,7 +3,6 @@
 # https://www.backblaze.com/blog/duplicati-backups-cloud-storage/
 #
 --- 
-version: '3.7'
 services:
 #
   duplicati:
