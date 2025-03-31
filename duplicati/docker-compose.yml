@@ -22,8 +22,8 @@ services:
       #- ${BACKUPSRC2}:/source2 #backup source 2
       #- ${BACKUPSRC3}:/source3 #backup source 3
       #- ${BACKUPSRC4}:/source3 #backup source 4
-#    ports:
-#      - 8200:8200 # webUI
+    ports:
+      - 8200:8200 # webUI
     restart: unless-stopped
 #
 #
