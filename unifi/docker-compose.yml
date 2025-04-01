@@ -38,9 +38,9 @@ services:
     container_name: unifi-db
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASS}
       - MONGO_USER=${MONGO_USER}
-      - MONGO_PASS=
+      - MONGO_PASS=${MONGO_PASS}
       - MONGO_DBNAME=unifi
       - MONGO_AUTHSOURCE=admin
     volumes:
