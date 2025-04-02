@@ -8,8 +8,8 @@ services:
       - ${LOCVOL1}headscale/config:/etc/headscale
       - ${LOCVOL1}headscale/data:/var/lib/headscale
     ports:
-      - 8080:8080
-      - 9090:9090
+      - 8081:8080
+      - 9091:9090
     restart: unless-stopped
     #command: serve
 #
