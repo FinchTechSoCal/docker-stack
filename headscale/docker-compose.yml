@@ -1,7 +1,7 @@
 --- 
 services:
   headscale:
-    image: headscale/headscale:latest-alpine
+    image: headscale/headscale:${HEADSCALE_VER} # latest-alpine
     container_name: headscale
     volumes:
       # Please change <CONFIG_PATH> to the fullpath of the config folder just created
@@ -14,7 +14,7 @@ services:
     command: serve
 #
   headscale-ui:
-    image: ghcr.io/gurucomputing/headscale-ui:latest
+    image: ghcr.io/gurucomputing/headscale-ui:${HEADSCALEUI_VER} # latest
     restart: unless-stopped
     container_name: headscale-ui
     #ports:
