@@ -2,7 +2,6 @@
 # https://nginxproxymanager.com/setup/#using-mysql-mariadb-database
 #
 --- 
-#version: '3.7'
 services:
   npm:
     image: jc21/nginx-proxy-manager:latest
