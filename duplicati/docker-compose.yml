@@ -12,9 +12,10 @@ services:
       - PUID=0 #must run as root, should override override anything provided by env
       - PGID=0 #must run as root, should override override anything provided by env
       - TZ=${TZ}
-      - SETTINGS_ENCRYPTION_KEY=${SETTINGS_ENCRYPTION_KEY}
       - DOCKER_MODS=${DOCKER_MODS}
+      - SETTINGS_ENCRYPTION_KEY=${SETTINGS_ENCRYPTION_KEY}
       - CLI_ARGS=${CLI_ARGS}
+      - DUPLICATI__WEBSERVICE_PASSWORD=${DUWEBPASS}
     volumes:
       - ${LOCVOL1}duplicati:/config
       - ${BACKUPDST}:/backups #backup destination (local), usually /etc/duplicati
