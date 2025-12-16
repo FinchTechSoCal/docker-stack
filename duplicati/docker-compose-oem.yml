@@ -1,0 +1,36 @@
+#
+# https://www.backblaze.com/blog/duplicati-backups-cloud-storage/
+#
+# CLI_ARGS see: https://prev-docs.duplicati.com/en/latest/07-other-command-line-utilities/
+#
+--- 
+services:
+#
+  duplicati:
+    image: duplicati/duplicati:${DUVERSION}
+    container_name: duplicati
+    environment:
+      - PUID=0 #must run as root, should override override anything provided by env
+      - PGID=0 #must run as root, should override override anything provided by env
+      - TZ=${TZ}
+      - DUPLICATI__WEBSERVICE_PASSWORD=${DUWEBPASS}
+      - DUPLICATI__WEBSERVICE_INTERFACE=any
+      - DUPLICATI__DISABLE_DB_ENCRYPTION=false
+      - SETTINGS_ENCRYPTION_KEY=${DUENCRYPTKEY}
+    volumes:
+      #- ${LOCVOL1}duplicati:/config
+      - ${LOCVOL1}duplicati:/data
+      - ${BACKUPDST}:/backups #backup destination (local), usually /etc/duplicati
+      - ${BACKUPSRC1}:/source #backup source 1
+      #- ${BACKUPSRC2}:/source2 #backup source 2
+      #- ${BACKUPSRC3}:/source3 #backup source 3
+      #- ${BACKUPSRC4}:/source3 #backup source 4
+    ports:
+      - 8200:8200 # webUI
+    restart: unless-stopped
+#
+#
+networks:
+  default:
+    name: ${CONNET}
+    external: true
